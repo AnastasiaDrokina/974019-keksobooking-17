@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Анастасия Дрокина](https://up.htmlacademy.ru/javascript/17/user/974019).
-* Наставник: `Неизвестно`.
+* Наставник: [Влад Кривокора](https://htmlacademy.ru/profile/krivokora).
 
 ---
 
