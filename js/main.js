@@ -17,10 +17,10 @@ var advertsGenerated = [];
 var places = ['palace', 'flat', 'house', 'bungalo'];
 
 for (var i = 0; i < 8; i++) {
-
+  var userId = i + 1;
   var advertObject = {
     author: {
-      avatar: 'img/avatars/user0' + getRandom(1, 8) + '.png'
+      avatar: 'img/avatars/user0' + userId + '.png'
     },
     offer: {
       type: places[getRandom(0, 3)]
