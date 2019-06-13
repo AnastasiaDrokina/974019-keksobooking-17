@@ -1,123 +1,37 @@
 'use strict';
-// 1. Функцию генерации случайных данных //
+// Параметры метки
+var WIDTH_MAP_PIN = 50;
+var HEIGHT_MAP_PIN = 70;
 
-// Функция случайного числа координата "x" метки на карте
-var getRandomX = function () {
-  return Math.floor(Math.random() * document.querySelector('.map__pins').offsetWidth);
+// 1. Функция генерации случайных данных //
+var getRandom = function (min, max) {
+  return (Math.round(min + Math.random() * (max - min)));
 };
 
-// Функция случайного числа координата "y" метки на карте
-var getRandomY = function () {
-  return Math.floor(Math.random() * (630 - 130) + 130);
-};
+// Минимальные и максимальные координаты x для карты
+var xMaxMap = document.querySelector('.map__pins').offsetWidth - WIDTH_MAP_PIN;
+var xMinMap = WIDTH_MAP_PIN / 2;
 
-// Массив, описывающий похожие объявления неподалёку
-var adverts = [
-  {
+// Массив, состоящий из сгенерированных объектов
+var advertsGenerated = [];
+var places = ['palace', 'flat', 'house', 'bungalo'];
+
+for (var i = 0; i < 8; i++) {
+
+  var advertObject = {
     author: {
-      avatar: 'img/avatars/user01.png'
+      avatar: 'img/avatars/user0' + getRandom(1, 8) + '.png'
     },
     offer: {
-      type: 'palace'
+      type: places[getRandom(0, 3)]
     },
     location: {
-      x: getRandomX(),
-      y: getRandomY(),
+      x: getRandom(xMinMap, xMaxMap),
+      y: getRandom(130, 630),
     }
-  },
-
-  {
-    author: {
-      avatar: 'img/avatars/user02.png'
-    },
-    offer: {
-      type: 'flat'
-    },
-    location: {
-      x: getRandomX(),
-      y: getRandomY(),
-    }
-  },
-
-  {
-    author: {
-      avatar: 'img/avatars/user03.png'
-    },
-    offer: {
-      type: 'house'
-    },
-    location: {
-      x: getRandomX(),
-      y: getRandomY(),
-    }
-  },
-
-  {
-    author: {
-      avatar: 'img/avatars/user04.png'
-    },
-    offer: {
-      type: 'bungalo'
-    },
-    location: {
-      x: getRandomX(),
-      y: getRandomY(),
-    }
-  },
-
-  {
-    author: {
-      avatar: 'img/avatars/user05.png'
-    },
-    offer: {
-      type: 'palace'
-    },
-    location: {
-      x: getRandomX(),
-      y: getRandomY(),
-    }
-  },
-
-  {
-    author: {
-      avatar: 'img/avatars/user06.png'
-    },
-    offer: {
-      type: 'flat'
-    },
-    location: {
-      x: getRandomX(),
-      y: getRandomY(),
-    }
-  },
-
-  {
-    author: {
-      avatar: 'img/avatars/user07.png'
-    },
-    offer: {
-      type: 'house'
-    },
-    location: {
-      x: getRandomX(),
-      y: getRandomY(),
-    }
-  },
-
-  {
-    author: {
-      avatar: 'img/avatars/user08.png'
-    },
-    offer: {
-      type: 'bungalo'
-    },
-    location: {
-      x: getRandomX(),
-      y: getRandomY(),
-    }
-  }
-];
-
+  };
+  advertsGenerated.push(advertObject);
+}
 
 // Переключаем карту в активное состояние
 var map = document.querySelector('.map');
@@ -128,10 +42,6 @@ var mapPins = document.querySelector('.map__pins');
 
 // Находим template -> document-fragment -> button(метку)
 var template = document.querySelector('#pin').content.querySelector('.map__pin');
-
-// Параметры метки
-var WIDTH_MAP_PIN = 50;
-var HEIGHT_MAP_PIN = 70;
 
 
 // 2. Функция создания DOM-элемента на основе JS-объекта //
@@ -158,10 +68,10 @@ var getButton = function (advert) {
 
 // 3.Функция заполнения блока DOM-элементами на основе массива JS-объектов //
 var displayButtons = function (advertsArray) {
-  for (var i = 0; i < advertsArray.length; i++) { // Создаем цикл для каждого объекта
-    var button = getButton(advertsArray[i]);
+  for (var j = 0; j < advertsArray.length; j++) { // Создаем цикл для каждого объекта
+    var button = getButton(advertsArray[j]);
 
     mapPins.appendChild(button); // Вставляем button в DOM
   }
 };
-displayButtons(adverts);
+displayButtons(advertsGenerated);
