@@ -1,9 +1,11 @@
 'use strict';
-// Параметры метки
+// Параметры меток
 var WIDTH_MAP_PIN = 50;
 var HEIGHT_MAP_PIN = 70;
+var WIDTH_MAP_PIN_MAIN = 65;
+var HEIGHT_MAP_PIN_MAIN = 65;
 
-// 1. Функция генерации случайных данных //
+// Функция получения рандомного числа
 var getRandom = function (min, max) {
   return (Math.round(min + Math.random() * (max - min)));
 };
@@ -35,7 +37,7 @@ for (var i = 0; i < 8; i++) {
 
 // Переключаем карту в активное состояние
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+// map.classList.remove('map--faded');
 
 // Находим карту
 var mapPins = document.querySelector('.map__pins');
@@ -44,29 +46,29 @@ var mapPins = document.querySelector('.map__pins');
 var template = document.querySelector('#pin').content.querySelector('.map__pin');
 
 
-// 2. Функция создания DOM-элемента на основе JS-объекта //
+// Функция создания DOM-элемента на основе JS-объекта //
 
 var getButton = function (advert) {
-  // 2.1. Сохраняем в переменных каждое свойство объекта
+  // Сохраняем в переменных каждое свойство объекта
   var avatar = advert.author.avatar;
   // var type = advert.offer.type;
   var x = advert.location.x - (WIDTH_MAP_PIN / 2);
   var y = advert.location.y - HEIGHT_MAP_PIN;
 
-  // 2.2. Клонируем button из template
+  // Клонируем button из template
   var button = template.cloneNode(true);
 
-  // 2.3. Меняем значения атрибутов button
+  // Меняем значения атрибутов button
   button.style.left = x + 'px';
   button.style.top = y + 'px';
   button.children[0].src = avatar;
   // button.children[0].alt = ; Здесь будет "alt"
 
-  // 2.4. Возвращаем button с новыми значениями
+  // Возвращаем button с новыми значениями
   return button;
 };
 
-// 3.Функция заполнения блока DOM-элементами на основе массива JS-объектов //
+// Функция заполнения блока DOM-элементами на основе массива JS-объектов //
 var displayButtons = function (advertsArray) {
   for (var j = 0; j < advertsArray.length; j++) { // Создаем цикл для каждого объекта
     var button = getButton(advertsArray[j]);
@@ -74,4 +76,58 @@ var displayButtons = function (advertsArray) {
     mapPins.appendChild(button); // Вставляем button в DOM
   }
 };
-displayButtons(advertsGenerated);
+
+// Функция блокировки элементов формы
+var disableForm = function (formArray) {
+  for (var z = 0; z < formArray.length; z++) {
+    formArray[z].setAttribute('disabled', 'disabled');
+  }
+};
+
+// Блокировка формы fieldset
+var adFormDisabledInput = document.querySelectorAll('.ad-form fieldset');
+disableForm(adFormDisabledInput);
+
+// Блокировка формы фильтров
+var adFormDisabledFilters = document.querySelectorAll('.map__filters .map__filter, .map__features');
+disableForm(adFormDisabledFilters);
+
+
+// Функция активации элементов формы
+var enableForm = function (formArray) {
+  for (var p = 0; p < formArray.length; p++) {
+    formArray[p].removeAttribute('disabled');
+  }
+};
+
+var adForm = document.querySelector('.ad-form');
+
+// Перевод страницы в активный режим
+var mainPin = document.querySelector('.map__pin--main');
+
+// onClick
+var onMainPinClick = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  enableForm(adFormDisabledInput);
+  enableForm(adFormDisabledFilters);
+  displayButtons(advertsGenerated);
+};
+
+mainPin.addEventListener('click', onMainPinClick);
+
+var mapMainPin = document.querySelector('.map__pin--main');
+var mapMainPinX = mapMainPin.offsetLeft + (WIDTH_MAP_PIN_MAIN / 2);
+var mapMainPinY = mapMainPin.offsetTop + (HEIGHT_MAP_PIN_MAIN / 2);
+var address = document.querySelector('#address');
+
+address.value = mapMainPinX + ', ' + mapMainPinY;
+
+// onMouseup
+var onMainPinMouseup = function () {
+  mapMainPinX = mapMainPin.offsetLeft + (WIDTH_MAP_PIN_MAIN / 2);
+  mapMainPinY = mapMainPin.offsetTop + (HEIGHT_MAP_PIN_MAIN + 16); // 16 = height от after минус transform
+  address.value = mapMainPinX + ', ' + mapMainPinY;
+};
+
+mainPin.addEventListener('mouseup', onMainPinMouseup);
