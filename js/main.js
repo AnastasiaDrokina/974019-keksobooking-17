@@ -136,22 +136,31 @@ mainPin.addEventListener('mouseup', onMainPinMouseup);
 var typeProperty = document.querySelector('#type');
 var price = document.querySelector('#price');
 
+var typePropertyArray = [
+  {
+    value: 'bungalo',
+    min: 0,
+  },
+  {
+    value: 'flat',
+    min: 1000,
+  },
+  {
+    value: 'house',
+    min: 5000,
+  },
+  {
+    value: 'palace',
+    min: 10000,
+  }
+];
+
 typeProperty.addEventListener('change', function () {
-  if (typeProperty.value === 'bungalo') {
-    price.min = 0;
-    price.placeholder = '0';
-  }
-  if (typeProperty.value === 'flat') {
-    price.min = 1000;
-    price.placeholder = '1000';
-  }
-  if (typeProperty.value === 'house') {
-    price.min = 5000;
-    price.placeholder = '5000';
-  }
-  if (typeProperty.value === 'palace') {
-    price.min = 10000;
-    price.placeholder = '10000';
+  for (var l = 0; l < typePropertyArray.length; l++) {
+    if (typeProperty.value === typePropertyArray[l].value) {
+      price.min = typePropertyArray[l].min;
+      price.placeholder = typePropertyArray[l].min;
+    }
   }
 });
 
@@ -160,13 +169,9 @@ var arrival = document.querySelector('#timein');
 var departure = document.querySelector('#timeout');
 
 arrival.addEventListener('change', function () {
-  if (arrival.value === '12:00') {
-    departure.value = '12:00';
-  }
-  if (arrival.value === '13:00') {
-    departure.value = '13:00';
-  }
-  if (arrival.value === '14:00') {
-    departure.value = '14:00';
-  }
+  departure.value = arrival.value;
+});
+
+departure.addEventListener('change', function () {
+  arrival.value = departure.value;
 });
