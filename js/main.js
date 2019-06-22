@@ -103,10 +103,7 @@ var enableForm = function (formArray) {
 var adForm = document.querySelector('.ad-form');
 
 // Перевод страницы в активный режим
-var mainPin = document.querySelector('.map__pin--main');
-
-// onClick
-var onMainPinClick = function () {
+var onPageActive = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   enableForm(adFormDisabledInput);
@@ -114,23 +111,74 @@ var onMainPinClick = function () {
   displayButtons(advertsGenerated);
 };
 
-mainPin.addEventListener('click', onMainPinClick);
-
 var mapMainPin = document.querySelector('.map__pin--main');
 var mapMainPinX = mapMainPin.offsetLeft + (WIDTH_MAP_PIN_MAIN / 2);
 var mapMainPinY = mapMainPin.offsetTop + (HEIGHT_MAP_PIN_MAIN / 2);
 var address = document.querySelector('#address');
+var firstMove = false;
 
 address.value = mapMainPinX + ', ' + mapMainPinY;
 
-// onMouseup
-var onMainPinMouseup = function () {
-  mapMainPinX = mapMainPin.offsetLeft + (WIDTH_MAP_PIN_MAIN / 2);
-  mapMainPinY = mapMainPin.offsetTop + (HEIGHT_MAP_PIN_MAIN + 16); // 16 = height от after минус transform
-  address.value = mapMainPinX + ', ' + mapMainPinY;
+// Функция обновления координат адреса
+var getAddressUpdate = function () {
+  var x = mapMainPin.offsetLeft + (WIDTH_MAP_PIN_MAIN / 2);
+  var y = mapMainPin.offsetTop + (HEIGHT_MAP_PIN_MAIN + 16); // 16 = height от after минус transform
+  address.value = x + ', ' + y;
 };
 
-mainPin.addEventListener('mouseup', onMainPinMouseup);
+mapMainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    if (!firstMove) {
+      onPageActive();
+      firstMove = true;
+    }
+
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+
+    var mapXStart = map.offsetLeft;
+    var mapXEnd = map.offsetLeft + map.offsetWidth;
+
+    if ((startCoords.x > (mapXStart + xMinMap)) && (startCoords.x < (mapXEnd - WIDTH_MAP_PIN))) {
+      mapMainPin.style.left = (mapMainPin.offsetLeft - shift.x) + 'px';
+    }
+    if (startCoords.y > 130 && startCoords.y < 630) {
+      mapMainPin.style.top = (mapMainPin.offsetTop - shift.y) + 'px';
+    }
+
+    getAddressUpdate();
+
+  };
+
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    getAddressUpdate();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
 
 // Минимальное значение поля «Цена за ночь»
 var typeProperty = document.querySelector('#type');
