@@ -140,7 +140,7 @@ mapMainPin.addEventListener('mousedown', function (evt) {
     y: evt.clientY
   };
 
-// Цикл Drag-and-drop
+  // Цикл Drag-and-drop
   var onMouseMove = function (moveEvt) {
     if (!firstMove) {
       onPageActive();
@@ -164,7 +164,7 @@ mapMainPin.addEventListener('mousedown', function (evt) {
       y: mapMainPin.offsetTop - shift.y,
     };
 
-// Ограничения перетаскивания
+    // Ограничения перетаскивания
     if (markerCoords.x < xMinMapMain) {
       markerCoords.x = xMinMapMain;
     } else {
