@@ -11,8 +11,14 @@ var getRandom = function (min, max) {
 };
 
 // Минимальные и максимальные координаты x для карты
-var xMaxMap = document.querySelector('.map__pins').offsetWidth - WIDTH_MAP_PIN;
+var xMaxMap = document.querySelector('.map__pins').offsetWidth - (WIDTH_MAP_PIN / 2);
 var xMinMap = WIDTH_MAP_PIN / 2;
+
+var xMaxMapMain = document.querySelector('.map__pins').offsetWidth - WIDTH_MAP_PIN_MAIN;
+var xMinMapMain = 0;
+
+var yMaxMapMain = 630 - (HEIGHT_MAP_PIN_MAIN + 16);
+var yMinMapMain = 130;
 
 // Массив, состоящий из сгенерированных объектов
 var advertsGenerated = [];
@@ -134,6 +140,7 @@ mapMainPin.addEventListener('mousedown', function (evt) {
     y: evt.clientY
   };
 
+// Цикл Drag-and-drop
   var onMouseMove = function (moveEvt) {
     if (!firstMove) {
       onPageActive();
@@ -152,21 +159,42 @@ mapMainPin.addEventListener('mousedown', function (evt) {
       y: moveEvt.clientY
     };
 
+    var markerCoords = {
+      x: mapMainPin.offsetLeft - shift.x,
+      y: mapMainPin.offsetTop - shift.y,
+    };
 
-    var mapXStart = map.offsetLeft;
-    var mapXEnd = map.offsetLeft + map.offsetWidth;
+// Ограничения перетаскивания
+    if (markerCoords.x < xMinMapMain) {
+      markerCoords.x = xMinMapMain;
+    } else {
+      markerCoords.x = markerCoords.x;
+    }
 
-    if ((startCoords.x > (mapXStart + xMinMap)) && (startCoords.x < (mapXEnd - WIDTH_MAP_PIN))) {
-      mapMainPin.style.left = (mapMainPin.offsetLeft - shift.x) + 'px';
+    if (markerCoords.x > xMaxMapMain) {
+      markerCoords.x = xMaxMapMain;
+    } else {
+      markerCoords.x = markerCoords.x;
     }
-    if (startCoords.y > 130 && startCoords.y < 630) {
-      mapMainPin.style.top = (mapMainPin.offsetTop - shift.y) + 'px';
+
+    if (markerCoords.y < yMinMapMain) {
+      markerCoords.y = yMinMapMain;
+    } else {
+      markerCoords.y = markerCoords.y;
     }
+
+    if (markerCoords.y > yMaxMapMain) {
+      markerCoords.y = yMaxMapMain;
+    } else {
+      markerCoords.y = markerCoords.y;
+    }
+
+    mapMainPin.style.left = markerCoords.x + 'px';
+    mapMainPin.style.top = markerCoords.y + 'px';
 
     getAddressUpdate();
 
   };
-
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
