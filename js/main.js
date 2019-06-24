@@ -240,7 +240,7 @@ typeProperty.addEventListener('change', function () {
   }
 });
 
-// Синхронизация полей «Время заезда» и «Время выезда»
+// Синхронизация полей «Время заезда» и «Время выезда».
 var arrival = document.querySelector('#timein');
 var departure = document.querySelector('#timeout');
 
