@@ -7,7 +7,6 @@
       window.form.adForm.classList.remove('ad-form--disabled');
       window.form.enableForm(window.form.adFormDisabledInput);
       window.form.enableForm(window.form.adFormDisabledFilters);
-      window.map.displayButtons(window.pin.adverts);
     },
   };
 

@@ -29,6 +29,7 @@
   };
 
   window.map = {
+    main: document.querySelector('main'),
     mapPins: document.querySelector('.map__pins'), // Находим карту
     map: document.querySelector('.map'), // Переключаем карту в активное состояние
     mapMainPin: document.querySelector('.map__pin--main'),

@@ -1,7 +1,6 @@
 'use strict';
 // модуль, который отвечает за создание пина — метки на карте;
 (function () {
-  // Находим template -> document-fragment -> button(метку)
   var template = document.querySelector('#pin').content.querySelector('.map__pin');
 
   window.pin = {

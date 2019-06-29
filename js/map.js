@@ -4,7 +4,7 @@
   var xMinMapMain = 0;
 
   var yMaxMapMain = 630 - (window.constants.HEIGHT_MAP_PIN_MAIN + 16);
-  var yMinMapMain = 130;
+  var yMinMapMain = 130 - (window.constants.HEIGHT_MAP_PIN_MAIN + 16);
 
   var firstMove = false;
 
@@ -19,6 +19,7 @@
     // Цикл Drag-and-drop
     var onMouseMove = function (moveEvt) {
       if (!firstMove) {
+        window.card();
         window.page.onPageActive();
         firstMove = true;
       }
@@ -83,4 +84,5 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
 })();
