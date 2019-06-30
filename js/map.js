@@ -3,8 +3,8 @@
   var xMaxMapMain = document.querySelector('.map__pins').offsetWidth - window.constants.WIDTH_MAP_PIN_MAIN;
   var xMinMapMain = 0;
 
-  var yMaxMapMain = 630 - (window.constants.HEIGHT_MAP_PIN_MAIN + 16);
-  var yMinMapMain = 130 - (window.constants.HEIGHT_MAP_PIN_MAIN + 16);
+  var yMaxMapMain = window.constants.YMAXMAP - (window.constants.HEIGHT_MAP_PIN_MAIN + window.constants.CORNER);
+  var yMinMapMain = window.constants.YMINMAP - (window.constants.HEIGHT_MAP_PIN_MAIN + window.constants.CORNER);
 
   var firstMove = false;
 

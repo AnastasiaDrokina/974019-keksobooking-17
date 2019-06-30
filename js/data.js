@@ -5,7 +5,10 @@
     WIDTH_MAP_PIN: 50,
     HEIGHT_MAP_PIN: 70,
     WIDTH_MAP_PIN_MAIN: 65,
-    HEIGHT_MAP_PIN_MAIN: 65
+    HEIGHT_MAP_PIN_MAIN: 65,
+    YMAXMAP: 630,
+    YMINMAP: 130,
+    CORNER: 16 // 16 = height от after минус transform
   };
 
   window.form = {
@@ -14,7 +17,7 @@
     // Функция обновления координат адреса
     getAddressUpdate: function () {
       var x = window.map.mapMainPin.offsetLeft + (window.constants.WIDTH_MAP_PIN_MAIN / 2);
-      var y = window.map.mapMainPin.offsetTop + (window.constants.HEIGHT_MAP_PIN_MAIN + 16); // 16 = height от after минус transform
+      var y = window.map.mapMainPin.offsetTop + (window.constants.HEIGHT_MAP_PIN_MAIN + window.constants.CORNER);
       window.form.address.value = x + ', ' + y;
     },
     // Функция активации элементов формы
