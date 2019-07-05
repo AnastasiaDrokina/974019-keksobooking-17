@@ -7,7 +7,9 @@
     };
 
     var onSuccess = function (data) {
-      window.map.displayButtons(data);
+      window.adverts = data;
+      var results = data.slice(0, 5);
+      window.map.displayButtons(results);
     };
 
     window.load('https://js.dump.academy/keksobooking/data', onSuccess, onError);

@@ -6,7 +6,6 @@
   window.pin = {
     getButton: function (advert) {
       var avatar = advert.author.avatar;
-      // var type = advert.offer.type;
       var x = advert.location.x - (window.constants.WIDTH_MAP_PIN / 2);
       var y = advert.location.y - window.constants.HEIGHT_MAP_PIN;
       var button = template.cloneNode(true);
