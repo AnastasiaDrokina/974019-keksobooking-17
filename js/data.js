@@ -46,9 +46,6 @@
         var button = window.pin.getButton(advertsArray[j]);
         window.map.mapPins.appendChild(button); // Вставляем button в DOM
       }
-
-      var popup = window.pin.getPopup(advertsArray[0]);
-      window.map.mapPins.appendChild(popup);
     },
   };
 
