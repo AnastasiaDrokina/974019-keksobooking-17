@@ -12,5 +12,6 @@
       pin.parentNode.removeChild(pin);
     });
     window.map.displayButtons(typeLimit);
+    window.pin.closePopup();
   });
 })();
