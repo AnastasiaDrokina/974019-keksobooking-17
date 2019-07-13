@@ -18,6 +18,7 @@
 
       button.addEventListener('click', function () {
         window.pin.openPopup(advert);
+        button.classList.add('map__pin--active');
       });
 
       return button;
@@ -32,6 +33,9 @@
     openPopup: function (advert) {
       if (document.querySelector('.map__card')) {
         window.pin.closePopup();
+        document.querySelectorAll('.map__pin').forEach(function (button) {
+          button.classList.remove('map__pin--active');
+        });
       }
 
       var popup = window.pin.getPopup(advert);
