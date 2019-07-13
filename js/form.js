@@ -60,4 +60,32 @@
   departure.addEventListener('change', function () {
     arrival.value = departure.value;
   });
+
+  var guestListMap = {
+    1: [1],
+    2: [2, 1],
+    3: [3, 2, 1],
+    100: [0],
+  };
+
+  var inputRoom = document.querySelector('#room_number');
+  var inputGuest = document.querySelector('#capacity');
+  var optionGuest = inputGuest.querySelectorAll('option');
+
+  var generateGuestOptions = function () {
+    var valueRoom = inputRoom.value;
+    var optionFinal = '';
+
+    optionGuest.forEach(function (option) {
+      if (guestListMap[valueRoom].indexOf(+option.value) > -1) {
+        optionFinal += option.outerHTML;
+      }
+    });
+    inputGuest.innerHTML = optionFinal;
+  };
+  generateGuestOptions();
+
+  inputRoom.addEventListener('change', function () {
+    generateGuestOptions();
+  });
 })();
