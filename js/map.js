@@ -8,6 +8,18 @@
 
   var firstMove = false;
 
+  var onInit = function () {
+    window.card();
+    window.page.onPageActive();
+    firstMove = true;
+  };
+
+  window.map.mapMainPin.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === 13) {
+      onInit();
+    }
+  });
+
   window.map.mapMainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -19,9 +31,7 @@
     // Цикл Drag-and-drop
     var onMouseMove = function (moveEvt) {
       if (!firstMove) {
-        window.card();
-        window.page.onPageActive();
-        firstMove = true;
+        onInit();
       }
 
       moveEvt.preventDefault();

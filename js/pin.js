@@ -33,9 +33,6 @@
     openPopup: function (advert) {
       if (document.querySelector('.map__card')) {
         window.pin.closePopup();
-        document.querySelectorAll('.map__pin').forEach(function (button) {
-          button.classList.remove('map__pin--active');
-        });
       }
 
       var popup = window.pin.getPopup(advert);
@@ -44,10 +41,18 @@
     },
 
     closePopup: function () {
-      document.removeEventListener('keydown', window.pin.onPopupEscPress);
       var popupParent = document.querySelector('.map__pins');
       var popupChild = document.querySelector('.map__card');
-      popupParent.removeChild(popupChild);
+
+      document.removeEventListener('keydown', window.pin.onPopupEscPress);
+
+      if (popupChild) {
+        popupParent.removeChild(popupChild);
+      }
+
+      document.querySelectorAll('.map__pin').forEach(function (button) {
+        button.classList.remove('map__pin--active');
+      });
     },
 
     getPopup: function (advert) {
