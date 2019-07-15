@@ -1,5 +1,4 @@
 'use strict';
-// модуль, который отвечает за создание пина — метки на карте;
 (function () {
   var templateButton = document.querySelector('#pin').content.querySelector('.map__pin');
   var templatePopup = document.querySelector('#card').content.querySelector('.map__card');
@@ -12,39 +11,48 @@
 
       var button = templateButton.cloneNode(true);
 
-      // Меняем значения атрибутов button
       button.style.left = x + 'px';
       button.style.top = y + 'px';
       button.children[0].src = avatar;
 
-      var onPopupEscPress = function (evt) {
-        if (evt.keyCode === 27) {
-          closePopup();
-        }
-      };
-
-      var openPopup = function () {
-        if (document.querySelector('.map__card')) {
-          closePopup();
-        }
-
-        var popup = window.pin.getPopup(advert);
-        window.map.mapPins.appendChild(popup);
-        document.addEventListener('keydown', onPopupEscPress);
-      };
 
       button.addEventListener('click', function () {
-        openPopup();
+        window.pin.openPopup(advert);
+        button.classList.add('map__pin--active');
       });
 
-      var closePopup = function () {
-        document.removeEventListener('keydown', onPopupEscPress);
-        var popupParent = document.querySelector('.map__pins');
-        var popupChild = document.querySelector('.map__card');
-        popupParent.removeChild(popupChild);
-      };
-
       return button;
+    },
+
+    onPopupEscPress: function (evt) {
+      if (evt.keyCode === 27) {
+        window.pin.closePopup();
+      }
+    },
+
+    openPopup: function (advert) {
+      if (document.querySelector('.map__card')) {
+        window.pin.closePopup();
+      }
+
+      var popup = window.pin.getPopup(advert);
+      window.map.mapPins.appendChild(popup);
+      document.addEventListener('keydown', window.pin.onPopupEscPress);
+    },
+
+    closePopup: function () {
+      var popupParent = document.querySelector('.map__pins');
+      var popupChild = document.querySelector('.map__card');
+
+      document.removeEventListener('keydown', window.pin.onPopupEscPress);
+
+      if (popupChild) {
+        popupParent.removeChild(popupChild);
+      }
+
+      document.querySelectorAll('.map__pin').forEach(function (button) {
+        button.classList.remove('map__pin--active');
+      });
     },
 
     getPopup: function (advert) {
@@ -104,9 +112,7 @@
 
       var closePopup = popup.querySelector('.popup__close');
       closePopup.addEventListener('click', function () {
-        var popupParent = closePopup.parentNode;
-        var mapParent = popupParent.parentNode;
-        mapParent.removeChild(popupParent);
+        window.pin.closePopup();
       });
 
       return popup;
