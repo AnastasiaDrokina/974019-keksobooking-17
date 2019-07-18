@@ -88,4 +88,91 @@
   inputRoom.addEventListener('change', function () {
     generateGuestOptions();
   });
+
+  // Cообщения отправке формы
+  var form = document.querySelector('.ad-form');
+
+  var displaySuccessMessage = function () {
+    var templateSuccess = document.querySelector('#success').content.querySelector('.success');
+    var success = templateSuccess.cloneNode(true);
+
+    var onClose = function () {
+      var successParent = success.parentNode;
+      successParent.removeChild(success);
+      document.removeEventListener('keydown', onSuccessEscPress)
+    };
+
+    var onSuccessEscPress = function (evt) {
+      if (evt.keyCode === 27) {
+        onClose();
+      }
+    };
+    success.addEventListener('click', onClose);
+
+    document.addEventListener('keydown', onSuccessEscPress);
+    document.querySelector('body').appendChild(success);
+  };
+
+  var resetButton = document.querySelector('.ad-form__reset');
+  resetButton.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    resetForm();
+    resetMap();
+  });
+
+  var resetForm = function () {
+    // Форма заdisabled
+    form.classList.add('ad-form--disabled');
+    // Сброс формы
+    form.reset();
+  };
+
+  var resetMap = function () {
+    // Удаление пинов с карты
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    pins.forEach(function (pin) {
+      pin.parentNode.removeChild(pin);
+    });
+    // Удаление попапов с карты
+    var popup = document.querySelector('.popup');
+    if (popup) {
+      popup.parentNode.removeChild(popup);
+    }
+  };
+
+  var onSuccess = function (response) {
+    displaySuccessMessage();
+    resetForm();
+    resetMap();
+  };
+
+  var onError = function (message) {
+    var templateError = document.querySelector('#error').content.querySelector('.error');
+    var error = templateError.cloneNode(true);
+    var errorMessage = error.querySelector('.error__message');
+
+    errorMessage.textContent = message;
+
+    var onClose = function () {
+      var errorParent = error.parentNode;
+      errorParent.removeChild(error);
+      document.removeEventListener('keydown', onErrorEscPress);
+    };
+
+    var onErrorEscPress = function (evt) {
+      if (evt.keyCode === 27) {
+        onClose();
+      }
+    };
+
+    error.addEventListener('click', onClose);
+
+    document.addEventListener('keydown', onErrorEscPress);
+    document.querySelector('body').appendChild(error);
+  };
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.upload(new FormData(form), 'https://js.dump.cademy/keksobooking', onSuccess, onError);
+  });
 })();
