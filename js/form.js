@@ -99,7 +99,7 @@
     var onClose = function () {
       var successParent = success.parentNode;
       successParent.removeChild(success);
-      document.removeEventListener('keydown', onSuccessEscPress)
+      document.removeEventListener('keydown', onSuccessEscPress);
     };
 
     var onSuccessEscPress = function (evt) {
@@ -140,7 +140,7 @@
     }
   };
 
-  var onSuccess = function (response) {
+  var onSuccess = function () {
     displaySuccessMessage();
     resetForm();
     resetMap();
@@ -173,6 +173,6 @@
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(form), 'https://js.dump.cademy/keksobooking', onSuccess, onError);
+    window.upload(new FormData(form), 'https://js.dump.academy/keksobooking', onSuccess, onError);
   });
 })();
