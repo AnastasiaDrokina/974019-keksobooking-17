@@ -1,21 +1,17 @@
 'use strict';
 (function () {
-  // Функция блокировки элементов формы
-  var disableForm = function (formArray) {
-    for (var z = 0; z < formArray.length; z++) {
-      formArray[z].setAttribute('disabled', 'disabled');
-    }
-  };
-
   // Блокировка формы fieldset
-  disableForm(window.form.adFormDisabledInput);
+  window.form.disableForm(window.form.adFormDisabledInput);
 
   // Блокировка формы фильтров
-  disableForm(window.form.adFormDisabledFilters);
+  window.form.disableForm(window.form.adFormDisabledFilters);
 
-  var mapMainPinX = window.map.mapMainPin.offsetLeft + (window.constants.WIDTH_MAP_PIN_MAIN / 2);
-  var mapMainPinY = window.map.mapMainPin.offsetTop + (window.constants.HEIGHT_MAP_PIN_MAIN / 2);
-  window.form.address.value = mapMainPinX + ', ' + mapMainPinY;
+  var getInitialAddress = function () {
+    var mapMainPinX = window.map.mapMainPin.offsetLeft + (window.constants.WIDTH_MAP_PIN_MAIN / 2);
+    var mapMainPinY = window.map.mapMainPin.offsetTop + (window.constants.HEIGHT_MAP_PIN_MAIN / 2);
+    window.form.address.value = mapMainPinX + ', ' + mapMainPinY;
+  };
+  getInitialAddress();
 
   // Минимальное значение поля «Цена за ночь»
   var typeProperty = document.querySelector('#type');
@@ -125,9 +121,21 @@
     form.classList.add('ad-form--disabled');
     // Сброс формы
     form.reset();
+    // Блокировка формы fieldset
+    window.form.disableForm(window.form.adFormDisabledInput);
+    // Блокировка формы фильтров
+    window.form.disableForm(window.form.adFormDisabledFilters);
   };
 
   var resetMap = function () {
+    window.map.firstMove = false;
+    // Меняем главную метку
+    window.map.mapMainPin.style.left = window.constants.LEFT_INITIAL + 'px';
+    window.map.mapMainPin.style.top = window.constants.TOP_INITIAL + 'px';
+    getInitialAddress();
+
+    // Активируем карту
+    window.map.map.classList.add('map--faded');
     // Удаление пинов с карты
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     pins.forEach(function (pin) {
@@ -146,33 +154,8 @@
     resetMap();
   };
 
-  var onError = function (message) {
-    var templateError = document.querySelector('#error').content.querySelector('.error');
-    var error = templateError.cloneNode(true);
-    var errorMessage = error.querySelector('.error__message');
-
-    errorMessage.textContent = message;
-
-    var onClose = function () {
-      var errorParent = error.parentNode;
-      errorParent.removeChild(error);
-      document.removeEventListener('keydown', onErrorEscPress);
-    };
-
-    var onErrorEscPress = function (evt) {
-      if (evt.keyCode === 27) {
-        onClose();
-      }
-    };
-
-    error.addEventListener('click', onClose);
-
-    document.addEventListener('keydown', onErrorEscPress);
-    document.querySelector('body').appendChild(error);
-  };
-
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(form), 'https://js.dump.academy/keksobooking', onSuccess, onError);
+    window.upload(new FormData(form), 'https://js.dump.academy/keksobooking', onSuccess, window.modal.onError);
   });
 })();
