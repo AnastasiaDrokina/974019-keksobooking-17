@@ -6,12 +6,10 @@
   var yMaxMapMain = window.constants.YMAXMAP - (window.constants.HEIGHT_MAP_PIN_MAIN + window.constants.CORNER);
   var yMinMapMain = window.constants.YMINMAP - (window.constants.HEIGHT_MAP_PIN_MAIN + window.constants.CORNER);
 
-  var firstMove = false;
-
   var onInit = function () {
     window.card();
     window.page.onPageActive();
-    firstMove = true;
+    window.map.firstMove = true;
   };
 
   window.map.mapMainPin.addEventListener('keydown', function (evt) {
@@ -30,7 +28,7 @@
 
     // Цикл Drag-and-drop
     var onMouseMove = function (moveEvt) {
-      if (!firstMove) {
+      if (!window.map.firstMove) {
         onInit();
       }
 

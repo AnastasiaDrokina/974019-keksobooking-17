@@ -1,21 +1,17 @@
 'use strict';
 (function () {
-  // Функция блокировки элементов формы
-  var disableForm = function (formArray) {
-    for (var z = 0; z < formArray.length; z++) {
-      formArray[z].setAttribute('disabled', 'disabled');
-    }
-  };
-
   // Блокировка формы fieldset
-  disableForm(window.form.adFormDisabledInput);
+  window.form.disableForm(window.form.adFormDisabledInput);
 
   // Блокировка формы фильтров
-  disableForm(window.form.adFormDisabledFilters);
+  window.form.disableForm(window.form.adFormDisabledFilters);
 
-  var mapMainPinX = window.map.mapMainPin.offsetLeft + (window.constants.WIDTH_MAP_PIN_MAIN / 2);
-  var mapMainPinY = window.map.mapMainPin.offsetTop + (window.constants.HEIGHT_MAP_PIN_MAIN / 2);
-  window.form.address.value = mapMainPinX + ', ' + mapMainPinY;
+  var getInitialAddress = function () {
+    var mapMainPinX = window.map.mapMainPin.offsetLeft + (window.constants.WIDTH_MAP_PIN_MAIN / 2);
+    var mapMainPinY = window.map.mapMainPin.offsetTop + (window.constants.HEIGHT_MAP_PIN_MAIN / 2);
+    window.form.address.value = mapMainPinX + ', ' + mapMainPinY;
+  };
+  getInitialAddress();
 
   // Минимальное значение поля «Цена за ночь»
   var typeProperty = document.querySelector('#type');
@@ -87,5 +83,79 @@
 
   inputRoom.addEventListener('change', function () {
     generateGuestOptions();
+  });
+
+  // Cообщения отправке формы
+  var form = document.querySelector('.ad-form');
+
+  var displaySuccessMessage = function () {
+    var templateSuccess = document.querySelector('#success').content.querySelector('.success');
+    var success = templateSuccess.cloneNode(true);
+
+    var onClose = function () {
+      var successParent = success.parentNode;
+      successParent.removeChild(success);
+      document.removeEventListener('keydown', onSuccessEscPress);
+    };
+
+    var onSuccessEscPress = function (evt) {
+      if (evt.keyCode === 27) {
+        onClose();
+      }
+    };
+    success.addEventListener('click', onClose);
+
+    document.addEventListener('keydown', onSuccessEscPress);
+    document.querySelector('body').appendChild(success);
+  };
+
+  var resetButton = document.querySelector('.ad-form__reset');
+  resetButton.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    resetForm();
+    resetMap();
+  });
+
+  var resetForm = function () {
+    // Форма заdisabled
+    form.classList.add('ad-form--disabled');
+    // Сброс формы
+    form.reset();
+    // Блокировка формы fieldset
+    window.form.disableForm(window.form.adFormDisabledInput);
+    // Блокировка формы фильтров
+    window.form.disableForm(window.form.adFormDisabledFilters);
+  };
+
+  var resetMap = function () {
+    window.map.firstMove = false;
+    // Меняем главную метку
+    window.map.mapMainPin.style.left = window.constants.LEFT_INITIAL + 'px';
+    window.map.mapMainPin.style.top = window.constants.TOP_INITIAL + 'px';
+    getInitialAddress();
+
+    // Активируем карту
+    window.map.map.classList.add('map--faded');
+    // Удаление пинов с карты
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    pins.forEach(function (pin) {
+      pin.parentNode.removeChild(pin);
+    });
+    // Удаление попапов с карты
+    var popup = document.querySelector('.popup');
+    if (popup) {
+      popup.parentNode.removeChild(popup);
+    }
+  };
+
+  var onSuccess = function () {
+    displaySuccessMessage();
+    resetForm();
+    resetMap();
+  };
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.upload(new FormData(form), 'https://js.dump.academy/keksobooking', onSuccess, window.modal.onError);
   });
 })();
