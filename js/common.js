@@ -10,7 +10,8 @@
     YMINMAP: 130,
     CORNER: 16, // 16 = height от after минус transform
     TOP_INITIAL: 375,
-    LEFT_INITIAL: 570
+    LEFT_INITIAL: 570,
+    FILES_TYPE: ['gif', 'jpg', 'jpeg', 'png']
   };
 
   window.form = {

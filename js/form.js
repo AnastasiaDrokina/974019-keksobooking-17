@@ -17,7 +17,7 @@
   var typeProperty = document.querySelector('#type');
   var price = document.querySelector('#price');
 
-  var typePropertyArray = [
+  var propertiesType = [
     {
       value: 'bungalo',
       min: 0,
@@ -37,10 +37,10 @@
   ];
 
   typeProperty.addEventListener('change', function () {
-    for (var l = 0; l < typePropertyArray.length; l++) {
-      if (typeProperty.value === typePropertyArray[l].value) {
-        price.min = typePropertyArray[l].min;
-        price.placeholder = typePropertyArray[l].min;
+    for (var l = 0; l < propertiesType.length; l++) {
+      if (typeProperty.value === propertiesType[l].value) {
+        price.min = propertiesType[l].min;
+        price.placeholder = propertiesType[l].min;
       }
     }
   });
@@ -125,6 +125,19 @@
     window.form.disableForm(window.form.adFormDisabledInput);
     // Блокировка формы фильтров
     window.form.disableForm(window.form.adFormDisabledFilters);
+
+    // Сброс аватара
+    var preview = document.querySelector('.ad-form-header__preview img');
+    preview.src = 'img/muffin-grey.svg';
+    // Сброс фото жилья
+    var previewPhotos = document.querySelectorAll('.ad-form__photo');
+    previewPhotos.forEach(function (photo) {
+      photo.parentNode.removeChild(photo);
+    });
+    var emptyPreviewPhoto = document.createElement('div');
+    var previewParent = document.querySelector('.ad-form__photo-container');
+    emptyPreviewPhoto.classList.add('ad-form__photo');
+    previewParent.appendChild(emptyPreviewPhoto);
   };
 
   var resetMap = function () {
