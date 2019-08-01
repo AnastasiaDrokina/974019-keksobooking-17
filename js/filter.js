@@ -1,15 +1,12 @@
 'use strict';
 (function () {
+  var filtersInput = document.querySelectorAll('.map__filter, .map__checkbox');
+  var featuresInput = document.querySelectorAll('.map__checkbox');
+
   var typeInput = document.querySelector('#housing-type');
   var priceInput = document.querySelector('#housing-price');
   var roomInput = document.querySelector('#housing-rooms');
   var guestInput = document.querySelector('#housing-guests');
-  var wifiInput = document.querySelector('#filter-wifi');
-  var dishWasherInput = document.querySelector('#filter-dishwasher');
-  var parkingInput = document.querySelector('#filter-parking');
-  var washerInput = document.querySelector('#filter-washer');
-  var elevatorInput = document.querySelector('#filter-elevator');
-  var conditionerInput = document.querySelector('#filter-conditioner');
   var lastTimeout;
 
   var checkType = function (advert) {
@@ -48,57 +45,29 @@
     }
   };
 
-  var checkWifi = function (advert) {
-    if (wifiInput.checked) {
-      return advert.offer.features.indexOf(wifiInput.value) >= 0;
-    } else {
-      return advert;
-    }
-  };
+  var checkFeatures = function (advert) {
+    var keepAdvert = true;
 
-  var checkDishWasher = function (advert) {
-    if (dishWasherInput.checked) {
-      return advert.offer.features.indexOf(dishWasherInput.value) >= 0;
-    } else {
-      return advert;
-    }
-  };
+    featuresInput.forEach(function (featureInput) {
+      if (keepAdvert) {
+        if (featureInput.checked) {
+          if (advert.offer.features.indexOf(featureInput.value) >= 0) {
+            keepAdvert = true;
+          } else {
+            keepAdvert = false;
+          }
+        } else {
+          keepAdvert = true;
+        }
+      }
+    });
 
-  var checkParking = function (advert) {
-    if (parkingInput.checked) {
-      return advert.offer.features.indexOf(parkingInput.value) >= 0;
-    } else {
-      return advert;
-    }
-  };
-
-  var checWasher = function (advert) {
-    if (washerInput.checked) {
-      return advert.offer.features.indexOf(washerInput.value) >= 0;
-    } else {
-      return advert;
-    }
-  };
-
-  var checkElevator = function (advert) {
-    if (elevatorInput.checked) {
-      return advert.offer.features.indexOf(elevatorInput.value) >= 0;
-    } else {
-      return advert;
-    }
-  };
-
-  var checkConditioner = function (advert) {
-    if (conditionerInput.checked) {
-      return advert.offer.features.indexOf(conditionerInput.value) >= 0;
-    } else {
-      return advert;
-    }
+    return keepAdvert;
   };
 
   var getFilteredAdverts = function () {
     var adverts = window.adverts.filter(function (advert) {
-      return checkType(advert) && checkPrice(advert) && checkRoom(advert) && checkGuest(advert) && checkWifi(advert) && checkDishWasher(advert) && checkParking(advert) && checWasher(advert) && checkElevator(advert) && checkConditioner(advert);
+      return checkType(advert) && checkPrice(advert) && checkRoom(advert) && checkGuest(advert) && checkFeatures(advert);
     });
     return adverts;
   };
@@ -126,54 +95,10 @@
     }, 500);
   };
 
-  // Фильтр по типу жилья
-  typeInput.addEventListener('change', function () {
-    debounceDisplayFilteredAdverts();
-  });
-
-  // Фильтр по цене
-  priceInput.addEventListener('change', function () {
-    debounceDisplayFilteredAdverts();
-  });
-
-  // Фильтр по числу комнат
-  roomInput.addEventListener('change', function () {
-    debounceDisplayFilteredAdverts();
-  });
-
-  // Фильтр по числу гостей
-  guestInput.addEventListener('change', function () {
-    debounceDisplayFilteredAdverts();
-  });
-
-  // Фильтр wifi
-  wifiInput.addEventListener('change', function () {
-    debounceDisplayFilteredAdverts();
-  });
-
-  // Фильтр dishwasher
-  dishWasherInput.addEventListener('change', function () {
-    debounceDisplayFilteredAdverts();
-  });
-
-  // Фильтр parking
-  parkingInput.addEventListener('change', function () {
-    debounceDisplayFilteredAdverts();
-  });
-
-  // Фильтр washer
-  washerInput.addEventListener('change', function () {
-    debounceDisplayFilteredAdverts();
-  });
-
-  // Фильтр elevator
-  elevatorInput.addEventListener('change', function () {
-    debounceDisplayFilteredAdverts();
-  });
-
-  // Фильтр conditioner
-  conditionerInput.addEventListener('change', function () {
-    debounceDisplayFilteredAdverts();
+  filtersInput.forEach(function (filterInput) {
+    filterInput.addEventListener('change', function () {
+      debounceDisplayFilteredAdverts();
+    });
   });
 })();
 
