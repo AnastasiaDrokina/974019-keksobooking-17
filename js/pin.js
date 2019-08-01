@@ -91,7 +91,6 @@
         featureHtml += li;
       }
 
-
       for (var k = 0; k < photo.length; k++) {
         var img = '<img src="' + photo[k] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
         photoHtml += img;
