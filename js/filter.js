@@ -96,9 +96,10 @@
     filterInput.addEventListener('change', function () {
       debounceDisplayFilteredAdverts();
     });
-    filterInput.addEventListener('keydown', function () {
-      debounceDisplayFilteredAdverts();
+    filterInput.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.common.constants.ENTER_KEYCODE) {
+        debounceDisplayFilteredAdverts();
+      }
     });
   });
 })();
-
