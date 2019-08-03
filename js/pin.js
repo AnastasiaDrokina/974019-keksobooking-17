@@ -6,8 +6,8 @@
   window.pin = {
     getButton: function (advert) {
       var avatar = advert.author.avatar;
-      var x = advert.location.x - (window.constants.WIDTH_MAP_PIN / 2);
-      var y = advert.location.y - window.constants.HEIGHT_MAP_PIN;
+      var x = advert.location.x - (window.common.constants.WIDTH_MAP_PIN / 2);
+      var y = advert.location.y - window.common.constants.HEIGHT_MAP_PIN;
 
       var button = templateButton.cloneNode(true);
 
@@ -25,7 +25,7 @@
     },
 
     onPopupEscPress: function (evt) {
-      if (evt.keyCode === 27) {
+      if (evt.keyCode === window.common.constants.ESCAPE_KEYCODE) {
         window.pin.closePopup();
       }
     },
@@ -36,7 +36,7 @@
       }
 
       var popup = window.pin.getPopup(advert);
-      window.map.mapPins.appendChild(popup);
+      window.common.map.pins.appendChild(popup);
       document.addEventListener('keydown', window.pin.onPopupEscPress);
     },
 

@@ -1,17 +1,33 @@
 'use strict';
 (function () {
   // Блокировка формы fieldset
-  window.form.disableForm(window.form.adFormDisabledInput);
+  window.common.form.disable(window.common.form.adFormDisabledInput);
 
   // Блокировка формы фильтров
-  window.form.disableForm(window.form.adFormDisabledFilters);
+  window.common.form.disable(window.common.form.adFormDisabledFilters);
 
   var getInitialAddress = function () {
-    var mapMainPinX = window.map.mapMainPin.offsetLeft + (window.constants.WIDTH_MAP_PIN_MAIN / 2);
-    var mapMainPinY = window.map.mapMainPin.offsetTop + (window.constants.HEIGHT_MAP_PIN_MAIN / 2);
-    window.form.address.value = mapMainPinX + ', ' + mapMainPinY;
+    var mapMainPinX = window.common.map.mainPin.offsetLeft + (window.common.constants.WIDTH_MAP_PIN_MAIN / 2);
+    var mapMainPinY = window.common.map.mainPin.offsetTop + (window.common.constants.HEIGHT_MAP_PIN_MAIN / 2);
+    window.common.form.address.value = mapMainPinX + ', ' + mapMainPinY;
   };
   getInitialAddress();
+
+  // Доступность checkbox
+  var onCheckboxEnterPress = function (evt) {
+    if (evt.keyCode === window.common.constants.ENTER_KEYCODE) {
+      evt.preventDefault();
+      if (evt.target.checked === true) {
+        evt.target.checked = false;
+      } else {
+        evt.target.checked = true;
+      }
+    }
+  };
+  var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  checkboxes.forEach(function (checkbox) {
+    checkbox.addEventListener('keydown', onCheckboxEnterPress);
+  });
 
   // Минимальное значение поля «Цена за ночь»
   var typeProperty = document.querySelector('#type');
@@ -99,7 +115,7 @@
     };
 
     var onSuccessEscPress = function (evt) {
-      if (evt.keyCode === 27) {
+      if (evt.keyCode === window.common.constants.ESCAPE_KEYCODE) {
         onClose();
       }
     };
@@ -122,9 +138,9 @@
     // Сброс формы
     form.reset();
     // Блокировка формы fieldset
-    window.form.disableForm(window.form.adFormDisabledInput);
+    window.common.form.disable(window.common.form.adFormDisabledInput);
     // Блокировка формы фильтров
-    window.form.disableForm(window.form.adFormDisabledFilters);
+    window.common.form.disable(window.common.form.adFormDisabledFilters);
 
     // Сброс аватара
     var preview = document.querySelector('.ad-form-header__preview img');
@@ -141,14 +157,14 @@
   };
 
   var resetMap = function () {
-    window.map.firstMove = false;
+    window.common.map.firstMove = false;
     // Меняем главную метку
-    window.map.mapMainPin.style.left = window.constants.LEFT_INITIAL + 'px';
-    window.map.mapMainPin.style.top = window.constants.TOP_INITIAL + 'px';
+    window.common.map.mainPin.style.left = window.common.constants.LEFT_INITIAL + 'px';
+    window.common.map.mainPin.style.top = window.common.constants.TOP_INITIAL + 'px';
     getInitialAddress();
 
     // Активируем карту
-    window.map.map.classList.add('map--faded');
+    window.common.map.map.classList.add('map--faded');
     // Удаление пинов с карты
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     pins.forEach(function (pin) {
@@ -169,6 +185,6 @@
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(form), 'https://js.dump.academy/keksobooking', onSuccess, window.modal.onError);
+    window.upload(new FormData(form), 'https://js.dump.academy/keksobooking', onSuccess, window.common.modal.onError);
   });
 })();

@@ -9,7 +9,7 @@
     var fileName = file.name.toLowerCase();
 
     if (file) {
-      var matches = window.constants.FILES_TYPE.some(function (it) {
+      var matches = window.common.constants.FILES_TYPE.some(function (it) {
         return fileName.endsWith(it);
       });
 
@@ -34,7 +34,7 @@
     var fileName = file.name.toLowerCase();
 
     if (file) {
-      var matches = window.constants.FILES_TYPE.some(function (it) {
+      var matches = window.common.constants.FILES_TYPE.some(function (it) {
         return fileName.endsWith(it);
       });
 
@@ -53,8 +53,8 @@
             var imgPhoto = document.createElement('img');
 
             imgPhoto.src = reader.result;
-            imgPhoto.width = 70;
-            imgPhoto.height = 70;
+            imgPhoto.width = window.common.constants.WIDTH_PHOTO;
+            imgPhoto.height = window.common.constants.HEIGH_PHOTO;
             previewPhoto.appendChild(imgPhoto);
           }
         });

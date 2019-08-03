@@ -1,24 +1,24 @@
 'use strict';
 (function () {
-  var xMaxMapMain = document.querySelector('.map__pins').offsetWidth - window.constants.WIDTH_MAP_PIN_MAIN;
+  var xMaxMapMain = document.querySelector('.map__pins').offsetWidth - window.common.constants.WIDTH_MAP_PIN_MAIN;
   var xMinMapMain = 0;
 
-  var yMaxMapMain = window.constants.YMAXMAP - (window.constants.HEIGHT_MAP_PIN_MAIN + window.constants.CORNER);
-  var yMinMapMain = window.constants.YMINMAP - (window.constants.HEIGHT_MAP_PIN_MAIN + window.constants.CORNER);
+  var yMaxMapMain = window.common.constants.YMAXMAP - (window.common.constants.HEIGHT_MAP_PIN_MAIN + window.common.constants.CORNER);
+  var yMinMapMain = window.common.constants.YMINMAP - (window.common.constants.HEIGHT_MAP_PIN_MAIN + window.common.constants.CORNER);
 
   var onInit = function () {
-    window.card();
-    window.page.onPageActive();
-    window.map.firstMove = true;
+    window.getCard();
+    window.page.onActive();
+    window.common.map.firstMove = true;
   };
 
-  window.map.mapMainPin.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === 13) {
+  window.common.map.mainPin.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.common.constants.ENTER_KEYCODE) {
       onInit();
     }
   });
 
-  window.map.mapMainPin.addEventListener('mousedown', function (evt) {
+  window.common.map.mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -28,7 +28,7 @@
 
     // Цикл Drag-and-drop
     var onMouseMove = function (moveEvt) {
-      if (!window.map.firstMove) {
+      if (!window.common.map.firstMove) {
         onInit();
       }
 
@@ -45,8 +45,8 @@
       };
 
       var markerCoords = {
-        x: window.map.mapMainPin.offsetLeft - shift.x,
-        y: window.map.mapMainPin.offsetTop - shift.y,
+        x: window.common.map.mainPin.offsetLeft - shift.x,
+        y: window.common.map.mainPin.offsetTop - shift.y,
       };
 
       // Ограничения перетаскивания
@@ -74,16 +74,16 @@
         markerCoords.y = markerCoords.y;
       }
 
-      window.map.mapMainPin.style.left = markerCoords.x + 'px';
-      window.map.mapMainPin.style.top = markerCoords.y + 'px';
+      window.common.map.mainPin.style.left = markerCoords.x + 'px';
+      window.common.map.mainPin.style.top = markerCoords.y + 'px';
 
-      window.form.getAddressUpdate();
+      window.common.form.getAddressUpdate();
 
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-      window.form.getAddressUpdate();
+      window.common.form.getAddressUpdate();
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);

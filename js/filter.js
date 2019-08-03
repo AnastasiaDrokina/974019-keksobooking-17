@@ -12,21 +12,19 @@
   var checkType = function (advert) {
     if (typeInput.value === 'any') {
       return advert;
-    } else {
-      return advert.offer.type === typeInput.value;
     }
+    return advert.offer.type === typeInput.value;
   };
 
   var checkPrice = function (advert) {
     if (priceInput.value === 'middle') {
-      return advert.offer.price > 10000 && advert.offer.price < 50000;
+      return advert.offer.price > window.common.constants.LOW_PRICE && advert.offer.price < window.common.constants.HIGH_PRICE;
     } else if (priceInput.value === 'low') {
-      return advert.offer.price < 10000;
+      return advert.offer.price < window.common.constants.LOW_PRICE;
     } else if (priceInput.value === 'high') {
-      return advert.offer.price > 50000;
-    } else {
-      return advert;
+      return advert.offer.price > window.common.constants.HIGH_PRICE;
     }
+    return advert;
   };
 
   var checkRoom = function (advert) {
@@ -40,9 +38,8 @@
   var checkGuest = function (advert) {
     if (guestInput.value === 'any') {
       return advert;
-    } else {
-      return advert.offer.guests === +guestInput.value;
     }
+    return advert.offer.guests === +guestInput.value;
   };
 
   var checkFeatures = function (advert) {
@@ -74,14 +71,14 @@
 
   var displayFiltereAdverts = function () {
     var adverts = getFilteredAdverts();
-    var advertsLimit = adverts.slice(0, 5);
+    var advertsLimit = adverts.slice(0, window.common.constants.MAX_RESULTS);
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
     pins.forEach(function (pin) {
       pin.parentNode.removeChild(pin);
     });
 
-    window.map.displayButtons(advertsLimit);
+    window.common.map.displayButtons(advertsLimit);
     window.pin.closePopup();
   };
 
@@ -92,11 +89,14 @@
 
     lastTimeout = window.setTimeout(function () {
       displayFiltereAdverts();
-    }, 500);
+    }, window.common.constants.DEBOUNCE_DELAY);
   };
 
   filtersInput.forEach(function (filterInput) {
     filterInput.addEventListener('change', function () {
+      debounceDisplayFilteredAdverts();
+    });
+    filterInput.addEventListener('keydown', function () {
       debounceDisplayFilteredAdverts();
     });
   });
