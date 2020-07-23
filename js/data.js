@@ -8,6 +8,6 @@
       window.common.map.displayButtons(results);
     };
 
-    window.load('https://cors-anywhere.herokuapp.com/https://js.dump.academy/keksobooking/data', onSuccess, window.common.modal.onError);
+    window.load('../data/data.json', onSuccess, window.common.modal.onError);
   };
 })();
