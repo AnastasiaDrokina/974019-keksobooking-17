@@ -8,6 +8,6 @@
       window.common.map.displayButtons(results);
     };
 
-    window.load('/data/data.json', onSuccess, window.common.modal.onError);
+    window.load('https://anastasiadrokina.github.io/974019-keksobooking-17/data/data.json', onSuccess, window.common.modal.onError);
   };
 })();
